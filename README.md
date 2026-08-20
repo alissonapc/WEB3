@@ -1,15 +1,2 @@
- # WEB3 Course Repository
-
- This repository is used to store my classwork, notes, and projects for the Web3 course.
-
- ## Contents
-
- - Course exercises
- - Notes and summaries
- - Practice projects
- - Other Web3-related materials
-
- ## Purpose
-
- The goal of this repository is to keep all of my Web3 study materials organized in one place.
-
+# CJOWEB3-2026-2
+Repositório da Disciplina de Desenvolvimento Web 3 - Curso Superior de Tecnologia em Análise e Desenvolvimento de Sistemas - IFSP Campus Campos do Jordão.
