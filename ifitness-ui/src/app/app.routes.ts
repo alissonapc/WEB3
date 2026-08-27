@@ -4,8 +4,10 @@ import { ActivityRegisterComponent } from './activities/activity-register/activi
 import { LoginFormComponent } from './security/login-form/login-form.component';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'activities/:id', component: ActivityRegisterComponent },
   { path: 'activities', component: ActivitiesListComponent },
   { path: 'activities/new', component: ActivityRegisterComponent },
-  { path: 'login', component: LoginFormComponent }
+  { path: 'login', component: LoginFormComponent },
+  { path: '**', redirectTo: 'login' }
 ];
