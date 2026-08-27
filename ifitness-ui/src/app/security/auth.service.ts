@@ -31,10 +31,12 @@ export class AuthService {
       const response: any = await firstValueFrom(
         this.http.post(this.oauthTokenUrl, body, { headers })
       );
-      console.log(response);
       this.storeToken(response['accessToken']);
     } catch (response: any) {
-      console.log(response);
+      if (response.status === 400 && response.error === 'invalid_grant') {
+        return Promise.reject('Usuário e/ou senha inválida!');
+      }
+      return Promise.reject(response);
     };
   }
 
