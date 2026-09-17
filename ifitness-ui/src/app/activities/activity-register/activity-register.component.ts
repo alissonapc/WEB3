@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
@@ -29,6 +30,9 @@ import { ErrorHandlerService } from '../../core/error-handler.service';
     MessageComponent,
     RouterModule
   ],
+  providers: [
+    Title
+  ],
   templateUrl: './activity-register.component.html',
   styleUrl: './activity-register.component.css'
 })
@@ -49,7 +53,8 @@ export class ActivityRegisterComponent {
     private errorHandler: ErrorHandlerService,
     private messageService: MessageService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private title: Title
   ) {
     this.activity = new Activity(this.auth.jwtPayload?.user_id);
   }
@@ -59,6 +64,7 @@ export class ActivityRegisterComponent {
     if (id != 'new') {
       this.loadActivity(id);
     }
+    this.title.setTitle('Cadastro de Atividade');
   }
 
   get editing(): boolean {

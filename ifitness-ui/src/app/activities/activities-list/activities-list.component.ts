@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 
 import { ActivityService } from '../activity.service';
@@ -19,6 +20,9 @@ import { ErrorHandlerService } from '../../core/error-handler.service';
     TooltipModule,
     RouterModule
   ],
+  providers: [
+    Title
+  ],
   templateUrl: './activities-list.component.html',
   styleUrl: './activities-list.component.css'
 })
@@ -30,10 +34,13 @@ export class ActivitiesListComponent {
     private activityService: ActivityService,
     private confirmation: ConfirmationService,
     private messageService: MessageService,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService,
+    private title: Title,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
+    this.title.setTitle('Listagem de Atividades');
     this.list();
   }
 
@@ -42,7 +49,13 @@ export class ActivitiesListComponent {
       .then(result => {
         this.activities = result;
       })
-      .catch(error => this.errorHandler.handle(error));
+      .catch(error => {
+        if (error.status === 401 || error.status === 403) {
+          this.router.navigate(['/login']);
+        } else {
+          this.errorHandler.handle(error);
+        }
+      });
   }
 
   confirmRemoval(activity: any): void {
