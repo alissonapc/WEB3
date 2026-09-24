@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { DatePipe } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../security/auth.service';
 import { Activity } from '../core/model';
 
 import moment from 'moment';
+
+export interface ActivityFilter {
+  user?: any,
+  type?: string,
+  initialDate?: Date;
+  finalDate?: Date;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +25,35 @@ export class ActivityService {
 
   constructor(
     private http: HttpClient,
-    private auth: AuthService
+    private auth: AuthService,
+    private datePipe: DatePipe
   ) { }
 
   async listByUser(): Promise<any> {
     this.email = this.auth.jwtPayload?.sub;
     return await firstValueFrom(this.http.get(`${this.activitiesUrl}/user/${this.email}`));
+  }
+
+  async filter(filter: ActivityFilter): Promise<any> {
+    let params = new HttpParams();
+
+    if (filter.user) {
+      params = params.set('user', filter.user);
+    }
+
+    if (filter.type) {
+      params = params.set('type', filter.type);
+    }
+
+    if (filter.initialDate) {
+      params = params.set('initialDate', this.datePipe.transform(filter.initialDate, 'yyyy-MM-dd')!);
+    }
+
+    if (filter.finalDate) {
+      params = params.set('finalDate', this.datePipe.transform(filter.finalDate, 'yyyy-MM-dd')!);
+    }
+
+    return await firstValueFrom(this.http.get(this.activitiesUrl, { params }));
   }
 
   async add(activity: Activity): Promise<Activity> {

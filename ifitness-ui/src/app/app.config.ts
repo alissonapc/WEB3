@@ -6,6 +6,7 @@ import { routes } from './app.routes';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import { DatePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 
@@ -32,6 +33,7 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     JwtHelperService,
+    DatePipe,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: IfitnessHttpInterceptor,

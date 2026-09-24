@@ -1,24 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { Title } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
+
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { Router, RouterModule } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { SelectModule } from 'primeng/select';
+import { DatePickerModule } from 'primeng/datepicker';
 
-import { ActivityService } from '../activity.service';
+import { ActivityFilter, ActivityService } from '../activity.service';
 import { ErrorHandlerService } from '../../core/error-handler.service';
+import { AuthService } from '../../security/auth.service';
 
 @Component({
   selector: 'app-activities-list',
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     ButtonModule,
     TableModule,
     TooltipModule,
-    RouterModule
+    RouterModule,
+    SelectModule,
+    DatePickerModule
   ],
   providers: [
     Title
@@ -28,6 +36,18 @@ import { ErrorHandlerService } from '../../core/error-handler.service';
 })
 export class ActivitiesListComponent {
 
+  type?: string;
+  initialDate?: Date;
+  finalDate?: Date;
+
+  types = [
+    { label: 'Todos', value: '' },
+    { label: 'Caminhada', value: 'CAMINHADA' },
+    { label: 'Ciclismo', value: 'CICLISMO' },
+    { label: 'Corrida', value: 'CORRIDA' },
+    { label: 'Natação', value: 'NATACAO' }
+  ];
+
   activities = [];
 
   constructor(
@@ -36,16 +56,24 @@ export class ActivitiesListComponent {
     private messageService: MessageService,
     private errorHandler: ErrorHandlerService,
     private title: Title,
-    private router: Router
+    private router: Router,
+    private auth: AuthService
   ) { }
 
   ngOnInit(): void {
-    this.title.setTitle('Listagem de Atividades');
-    this.list();
+    this.title.setTitle('Lista de Atividades');
+    this.filter();
   }
 
-  list(): void {
-    this.activityService.listByUser()
+  filter(): void {
+    const filter: ActivityFilter = {
+      user: this.auth.jwtPayload?.user_id,
+      type: this.type,
+      initialDate: this.initialDate,
+      finalDate: this.finalDate
+    }
+
+    this.activityService.filter(filter)
       .then(result => {
         this.activities = result;
       })
@@ -70,7 +98,7 @@ export class ActivitiesListComponent {
   delete(activity: any): void {
     this.activityService.delete(activity.id)
       .then(() => {
-        this.list();
+        this.filter();
         this.messageService.add({ severity: 'success', detail: 'Atividade excluída com sucesso!' });
       })
       .catch(error => this.errorHandler.handle(error));
