@@ -11,9 +11,9 @@ export class IfitnessHttpInterceptor implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-    // 1. Se for Login, Refresh, Logout ou cadastro de usuário, passa direto sem mexer
+    // 1. Se for Login, Refresh ou Logout, passa direto sem mexer
     if (req.url.includes('/auth/login') || req.url.includes('/auth/refresh')
-      || req.url.includes('/auth/logout') || req.url.includes('/users')) {
+        || req.url.includes('/auth/logout') || req.url.includes('/users')) {
       return next.handle(req);
     }
 

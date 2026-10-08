@@ -19,9 +19,10 @@ export class NavbarComponent {
     private router: Router
   ) { }
 
-  logout(): void {
-    this.auth.logout();
-    this.router.navigate(['/login']);
+  logout() {
+    this.auth.logout()
+      .catch(error => console.error('Erro ao encerrar a sessão na API', error))
+      .then(() => this.router.navigate(['/login']));
   }
 
 }
