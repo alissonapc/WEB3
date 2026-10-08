@@ -4,6 +4,7 @@ import { ActivityRegisterComponent } from './activities/activity-register/activi
 import { LoginFormComponent } from './security/login-form/login-form.component';
 import { UserRegisterComponent } from './users/user-register/user-register.component';
 import { PageNotFoundComponent } from './core/page-not-found.component';
+import { NotAuthorizedComponent } from './core/not-authorized.component';
 import { authGuard } from './security/auth.guard';
 
 export const routes: Routes = [
@@ -11,20 +12,24 @@ export const routes: Routes = [
   {
     path: 'activities/:id',
     component: ActivityRegisterComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_REGISTER_ACTIVITY'] }
   },
   {
     path: 'activities',
     component: ActivitiesListComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_SEARCH_ACTIVITY'] }
   },
   {
     path: 'activities/new',
     component: ActivityRegisterComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_REGISTER_ACTIVITY'] }
   },
   { path: 'users/new', component: UserRegisterComponent },
   { path: 'login', component: LoginFormComponent },
+  { path: 'not-authorized', component: NotAuthorizedComponent },
   { path: 'page-not-found', component: PageNotFoundComponent },
-  { path: '**', redirectTo: 'page-not-found'} // importante que seja a última rota
+  { path: '**', redirectTo: 'page-not-found' } // importante que seja a última rota
 ];

@@ -82,6 +82,20 @@ export class AuthService {
     this.jwtPayload = null;
   }
 
+  hasPermission(permission: string): boolean {
+    const authorities: string = this.jwtPayload?.authorities ?? '';
+    return authorities.split(' ').includes(permission);
+  }
+
+  hasAnyPermission(roles: string[]): boolean {
+    for (const role of roles) {
+      if (this.hasPermission(role)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private storeToken(token: string): void {
     this.jwtPayload = this.jwtHelper.decodeToken(token);
     localStorage.setItem('token', token);

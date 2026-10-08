@@ -18,5 +18,11 @@ export const authGuard: CanActivateFn = async (route, state) => {
     }
   }
 
+  // 2. Está logado. Tem alguma das permissões exigidas pela rota?
+  const roles = route.data['roles'];
+  if (roles && !auth.hasAnyPermission(roles)) {
+    return router.createUrlTree(['/not-authorized']);
+  }
+
   return true;
 };
