@@ -62,20 +62,12 @@ export class AuthService {
   }
 
   async logout(): Promise<void> {
-    const headers = new HttpHeaders()
-      .append('Content-Type', 'application/json');
-
-    const body = {};
-
     try {
       await firstValueFrom(
-        this.http.post(this.logoutUrl, body, { headers, withCredentials: true })
+        this.http.post(this.logoutUrl, {}, { withCredentials: true })
       );
-    } catch (response: any) {
-      return Promise.reject(response);
     } finally {
-      this.jwtPayload = undefined;
-      localStorage.removeItem('token');
+      this.clearAccessToken();
     }
   }
 
@@ -83,6 +75,11 @@ export class AuthService {
     const token = localStorage.getItem('token');
 
     return !token || this.jwtHelper.isTokenExpired(token);
+  }
+
+  clearAccessToken(): void {
+    localStorage.removeItem('token');
+    this.jwtPayload = null;
   }
 
   private storeToken(token: string): void {
