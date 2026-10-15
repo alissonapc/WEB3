@@ -8,6 +8,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 import { NavbarComponent } from './core/navbar/navbar.component';
+import { FooterComponent } from './core/footer.component';
 import { ErrorHandlerService } from './core/error-handler.service';
 
 registerLocaleData(localePt);
@@ -19,6 +20,7 @@ registerLocaleData(localePt);
     CommonModule,
     RouterOutlet,
     NavbarComponent,
+    FooterComponent,
     ToastModule,
     ConfirmDialogModule
   ],

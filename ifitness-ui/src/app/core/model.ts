@@ -47,3 +47,17 @@ export class Activity {
   }
 
 }
+
+export interface ActivityTypeStatistic {
+  type: string;
+  total: number;
+  distance: number;
+  duration: number;
+}
+
+export interface ActivityStatistics {
+  totalDistance: number;
+  totalDuration: number;
+  totalActivities: number;
+  byType: ActivityTypeStatistic[];
+}

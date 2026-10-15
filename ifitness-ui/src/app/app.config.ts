@@ -5,12 +5,33 @@ import { routes } from './app.routes';
 
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
+import { definePreset } from '@primeng/themes';
 import Aura from '@primeng/themes/aura';
 import { DatePipe } from '@angular/common';
 import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 
 import { IfitnessHttpInterceptor } from './security/ifitness-http-interceptor';
+
+// Tema do PrimeNG: o Aura com a cor primária trocada para verde,
+// para combinar com o verde (bg-success) do Bootstrap
+const IfitnessPreset = definePreset(Aura, {
+  semantic: {
+    primary: {
+      50: '{green.50}',
+      100: '{green.100}',
+      200: '{green.200}',
+      300: '{green.300}',
+      400: '{green.400}',
+      500: '{green.500}',
+      600: '{green.600}',
+      700: '{green.700}',
+      800: '{green.800}',
+      900: '{green.900}',
+      950: '{green.950}'
+    }
+  }
+});
 
 export function tokenGetter(): any {
   return localStorage.getItem('token');
@@ -42,7 +63,10 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura
+        preset: IfitnessPreset,
+        options: {
+          darkModeSelector: false // mantém o tema claro, como no Bootstrap
+        }
       }
     })
   ]

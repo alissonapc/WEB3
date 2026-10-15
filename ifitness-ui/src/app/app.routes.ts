@@ -5,10 +5,17 @@ import { LoginFormComponent } from './security/login-form/login-form.component';
 import { UserRegisterComponent } from './users/user-register/user-register.component';
 import { PageNotFoundComponent } from './core/page-not-found.component';
 import { NotAuthorizedComponent } from './core/not-authorized.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { authGuard } from './security/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: 'activities', pathMatch: 'full' },
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [authGuard],
+    data: { roles: ['ROLE_SEARCH_ACTIVITY'] }
+  },
   {
     path: 'activities/:id',
     component: ActivityRegisterComponent,

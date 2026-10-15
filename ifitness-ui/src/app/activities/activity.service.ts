@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { DatePipe } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../security/auth.service';
-import { Activity } from '../core/model';
+import { Activity, ActivityStatistics } from '../core/model';
 
 import moment from 'moment';
 
@@ -54,6 +54,12 @@ export class ActivityService {
     }
 
     return await firstValueFrom(this.http.get(this.activitiesUrl, { params }));
+  }
+
+  async statistics(): Promise<ActivityStatistics> {
+    return await firstValueFrom(
+      this.http.get<ActivityStatistics>(`${this.activitiesUrl}/statistics`)
+    );
   }
 
   async add(activity: Activity): Promise<Activity> {

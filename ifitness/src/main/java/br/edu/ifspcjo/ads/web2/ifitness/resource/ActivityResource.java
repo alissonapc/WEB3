@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.ifspcjo.ads.web2.ifitness.domain.model.Activity;
 import br.edu.ifspcjo.ads.web2.ifitness.repository.ActivityRepository;
 import br.edu.ifspcjo.ads.web2.ifitness.repository.filter.ActivityFilter;
+import br.edu.ifspcjo.ads.web2.ifitness.repository.projection.ActivityStatistics;
 import br.edu.ifspcjo.ads.web2.ifitness.service.ActivityService;
 import jakarta.validation.Valid;
 
@@ -39,6 +41,13 @@ public class ActivityResource {
 		return activityService.filter(activityFilter);
 	}
 	
+	@GetMapping("/statistics")
+	@PreAuthorize("hasAuthority('ROLE_SEARCH_ACTIVITY')")
+	public ActivityStatistics statistics(Authentication authentication) {
+		// authentication.getName() devolve o e-mail do usuário dono do access token
+		return activityService.statistics(authentication.getName());
+	}
+
 	@GetMapping("/{id}")
 	@PreAuthorize("hasAuthority('ROLE_SEARCH_ACTIVITY')")
 	public ResponseEntity<Activity> findById(@PathVariable Long id) {
